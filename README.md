@@ -1,8 +1,10 @@
 ###DCache
 一个简单，轻量级的数据缓存类库！
+
 ###Features
 * 使用简单，并且可配置缓存目录，缓存周期，缓存文件上限(还未实现，准备使用LruCache实现)
 * 支持缓存数据类型：String字符串，Object，字节数组
+
 ###Usage
 * 配置DCache:
 <pre>DCache.get(this).cacheDir(file).cacheDuration(1000*5);</pre>
