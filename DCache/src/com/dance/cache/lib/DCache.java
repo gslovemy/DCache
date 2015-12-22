@@ -1,23 +1,17 @@
 package com.dance.cache.lib;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.RandomAccessFile;
 import java.io.Serializable;
-import java.nio.CharBuffer;
 import java.util.Properties;
-
 import android.content.Context;
-import android.util.Log;
 
 /**
  * 缓存引擎，负责提供存取数据的方法，设置缓存目录,缓存大小
@@ -54,10 +48,9 @@ public class DCache {
 	 */
 	public DCache cacheDir(File cacheDir) {
 		this.mCacheDir = cacheDir;
-		if (!mCacheDir.exists()) {
+		if (!mCacheDir.exists() && cacheDir.isDirectory()) {
 			mCacheDir.mkdirs();
 		}
-		Log.e("tag", "cacheDir : "+mInstance.getCacheDir().getAbsolutePath());
 		initCacheProperties();
 		
 		return mInstance;
@@ -95,7 +88,6 @@ public class DCache {
 	private void initCacheProperties() {
 		mCacheProperties = new Properties();
 		File propertyFile = newFile(CACHE_PROPERTIES);
-		Log.e("tag", "initCacheProperties  path: "+propertyFile.getAbsolutePath());
 		try {
 			FileInputStream fis = new FileInputStream(propertyFile);
 			mCacheProperties.load(fis);
@@ -131,7 +123,6 @@ public class DCache {
 		try {
 			out = new BufferedWriter(new FileWriter(file), 1024);
 			out.write(data);
-			Log.e("tag", "write string successful");
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -350,7 +341,6 @@ public class DCache {
 		long existDuration = System.currentTimeMillis() - file.lastModified();
 		long cacheDuration = Long.parseLong(mCacheProperties.getProperty(key,
 				"0"));
-		Log.e("tag", "cacheDuration: "+cacheDuration+"  existDuration:"+existDuration);
 		return existDuration > cacheDuration;
 	}
 
